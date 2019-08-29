@@ -10,6 +10,11 @@ module.exports = {
     filename: '[name].bundle.js',
     path: path.resolve(__dirname, '../dist')
   },
+  resolve: {
+    alias: {
+       'vue$': 'vue/dist/vue.esm.js'
+    }
+  },
   module: {
     rules: [
       {
@@ -51,7 +56,6 @@ module.exports = {
     ]
   },
   plugins: [
-    new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       template: './src/index.html',
       minify: {
