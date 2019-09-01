@@ -1,8 +1,9 @@
 import Vue from 'vue';
+import './css/reset.css';
 import './css/style.less';
 
 new Vue({
-  el: '#root',
+  el: '#pinetodo',
   data: {
     newTodo: null,  // 待录入的新todo
     index: 0,       // 新加的索引
