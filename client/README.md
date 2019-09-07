@@ -1,14 +1,29 @@
-## 介绍
+# pinetodo
 
-最基础的webpack脚手架：支持ES6语法
+## Project setup
+```
+yarn install
+```
 
-## 支持功能
+### Compiles and hot-reloads for development
+```
+yarn run serve
+```
 
-- 支持ES6
-- 支持less
-- 支持postcss
-- 支持字体
-- 支持图片压缩
+### Compiles and minifies for production
+```
+yarn run build
+```
 
+### Run your tests
+```
+yarn run test
+```
 
+### Lints and fixes files
+```
+yarn run lint
+```
 
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).
