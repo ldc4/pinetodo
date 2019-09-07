@@ -1,6 +1,6 @@
 <template>
   <div class="start">
-    <button class="start-btn">轻松开始</button>
+    <button class="start-btn" v-bind="$attrs" v-on="$listeners">轻松开始</button>
   </div>
 </template>
 
@@ -41,5 +41,9 @@ export default {
 
   font-weight: 700;
   white-space: nowrap;
+}
+.start-btn:hover {
+  box-shadow: none;
+  background: #f4f4f4;
 }
 </style>

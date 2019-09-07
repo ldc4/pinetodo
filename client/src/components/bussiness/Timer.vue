@@ -1,14 +1,64 @@
 <template>
   <div class="timer">
-    <div class="process"></div>
-    <p class="time">10:10</p>
-    <span class="close">×</span>
+    <div class="process" :style="{ width: (process/total)*100 + '%' }"></div>
+    <p class="time">{{showTime}}</p>
+    <span class="close" @click="$emit('close')">×</span>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Timer'
+  name: 'Timer',
+  created() {
+    this.timer = setInterval(this.clock, 1000);
+  },
+  beforeDestroy() {
+    clearInterval(this.timer);
+  },
+  props: {
+    total: {
+      type: Number,
+      default: 3600,
+    },
+    initProcess: {
+      type: Number,
+      default: 0
+    }
+  },
+  data() {
+    return {
+      process: this.initProcess
+    }
+  },
+  computed: {
+    showTime: function() {
+      const time = this.total - this.process;
+      const days = Math.floor(time / (60 * 60 * 24));
+      let mod = time % (60 * 60 * 24);
+      let hours = Math.floor(mod / (60 * 60));
+      if (hours < 10) { hours = '0' + hours; }
+      mod = mod % (60 * 60);
+      let minutes = Math.floor(mod / 60);
+      if (minutes < 10) { minutes = '0' + minutes; }
+      mod = mod % 60;
+      let seconds = mod;
+      if (seconds < 10) { seconds = '0' + seconds; }
+      const showTime = `${days > 0 ? `${days}天 ` : ''}${hours > 0 ? `${hours}:` : ''}${minutes}:${seconds}`;
+      document.title = `${showTime} - 青松土豆`;
+      return showTime;
+    }
+  },
+  methods: {
+    clock: function() {
+      this.process++;
+      this.$emit('clock', this.process);
+      if (this.process >= this.total) {
+        clearInterval(this.timer);
+        document.title = '青松土豆';
+        this.$emit('completed');
+      }
+    },
+  }
 }
 </script>
 
@@ -29,7 +79,7 @@ export default {
   font-size: 1em;
 }
 .process {
-  width: 80%;
+  width: 0%;
   background-image: linear-gradient(to bottom,#F8F8F8 0,#EEE 100%);
   position: absolute;
   left: 0;

@@ -1,5 +1,5 @@
 <template>
-  <div class="smart-list">
+  <div class="todo-list">
     <template v-if="data && data.length > 0">
       <ul>
         <li
@@ -34,7 +34,7 @@ import EmptyIcon from '../icon/EmptyIcon.vue';
 import CheckIcon from '../icon/CheckIcon.vue';
 
 export default {
-  name: 'SmartList',
+  name: 'TodoList',
   components: {
     EmptyIcon,
     CheckIcon
@@ -55,10 +55,10 @@ export default {
 </script>
 
 <style scoped>
-.smart-list {
+.todo-list {
   text-align: left;
 }
-.smart-list > ul > li {
+.todo-list > ul > li {
   border-bottom: 1px solid #eee;
 }
 .item-content {

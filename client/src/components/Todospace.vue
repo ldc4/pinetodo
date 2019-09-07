@@ -5,7 +5,7 @@
         <EnterInput v-model="newTodo" placeholder="添加待办事项" @create="create" />
       </template>
       <template #main>
-        <SmartList :data="todos" @click="done" />
+        <TodoList :data="todos" @click="done" />
       </template>
     </BoxLayout>
   </div>
@@ -13,7 +13,7 @@
 
 <script>
 import BoxLayout from './base/BoxLayout.vue'
-import SmartList from './base/SmartList.vue'
+import TodoList from './bussiness/TodoList.vue'
 import EnterInput from './bussiness/EnterInput.vue'
 
 export default {
@@ -21,7 +21,7 @@ export default {
   components: {
     BoxLayout,
     EnterInput,
-    SmartList
+    TodoList
   },
   props: {
     msg: String

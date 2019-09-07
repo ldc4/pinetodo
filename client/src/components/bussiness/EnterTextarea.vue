@@ -1,10 +1,18 @@
 <template>
   <div class="result">
-    <textarea class="result-textarea" style="resize: vertical;"></textarea>
-    <div class="result-submit">
+    <textarea
+      class="result-textarea"
+      style="resize: vertical;"
+      v-bind="$attrs"
+      v-on="inputListeners"
+      :value="value"
+      @input="input"
+      @keyup.ctrl.enter="create"
+    ></textarea>
+    <div class="result-submit" @click="create">
       <EnterIcon />
     </div>
-    <span class="close">×</span>
+    <span class="close" @click="$emit('close')">×</span>
   </div>
 </template>
 
@@ -15,6 +23,36 @@ export default {
   name: 'EnterTextarea',
   components: {
     EnterIcon
+  },
+  props: {
+    value: String
+  },
+  computed: {
+    inputListeners: function () {
+      var vm = this
+      // `Object.assign` 将所有的对象合并为一个新对象
+      return Object.assign({},
+        // 我们从父级添加所有的监听器
+        this.$listeners,
+        // 然后我们添加自定义监听器，
+        // 或覆写一些监听器的行为
+        {
+          // 这里确保组件配合 `v-model` 的工作
+          input: function (event) {
+            vm.$emit('input', event.target.value)
+          }
+        }
+      )
+    }
+  },
+  methods: {
+    input: function(e) {
+      const value = e.target.value;
+      this.$emit('input', value);
+    },
+    create: function() {
+      this.$emit('create');
+    }
   }
 }
 </script>
@@ -42,19 +80,20 @@ textarea:focus + .result-submit {
   width: 100%;
   overflow: hidden;
   overflow-wrap: break-word;
-  height: 33px;
+  height: 1.4em;
   padding-right: 1.8em;
   min-height: 2.5em;
-  line-height: 1.4em;
+  line-height: 2em;
   padding: .5em 1.5em .5em .5em;
   position: relative;
   font-size: 1em;
+  min-height: 40px;
   max-height: 100px;
 }
 .result-submit {
   position: absolute;
   right: 0;
-  bottom: 1em;
+  bottom: 1.2em;
   z-index: 2;
   height: 1em;
   padding: .5em;
