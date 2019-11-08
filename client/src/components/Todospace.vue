@@ -29,30 +29,46 @@ export default {
   data: function() {
     return {
       newTodo: '',
-      index: 0,       // 新加的索引
       todos: [
         // {
         //   key: 'x',
         //   value: 'sth. to do',
-        //   order: 1,
-        //   createTime: Date.now(),
         // }
       ]
     }
   },
+  async created() {
+    const { code, data } = await this.$api('getTodoList')
+    if (code === 0) {
+      this.todos = data.map((todo) => {
+        return {
+          key: todo._id,
+          value: todo.content
+        }
+      }).filter(t => t.value).reverse()
+    }
+  },
   methods: {
     // 创建todo
-    create: function() {
-      this.todos.unshift({
-        key: this.index++,
-        value: this.newTodo,
-      });
-      this.newTodo = '';
+    create: async function() {
+      if (this.newTodo) {
+        const { code, data } = await this.$api('addTodo', { content: this.newTodo })
+        if (code === 0) {
+          this.todos.unshift({
+            key: data._id,
+            value: data.content,
+          });
+          this.newTodo = '';
+        }
+      }
     },
     // 完成todo
-    done: function(index) {
+    done: async function(item, index) {
       if (index >= 0 && index < this.todos.length) {
-        this.todos.splice(index, 1);
+        const { code } = await this.$api('removeTodo', { id: item.key })
+        if (code === 0) {
+          this.todos.splice(index, 1);
+        }
       }
     }
   }

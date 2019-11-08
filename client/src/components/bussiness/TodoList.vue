@@ -7,7 +7,7 @@
           :key="item.key"
         >
           <div class="item-content">
-            <div class="check-container" @click="click(index)">
+            <div class="check-container" @click="click(item, index)">
               <span class="check">
                 <CheckIcon :checked="item.checked" />
               </span>
@@ -47,8 +47,8 @@ export default {
     },
   },
   methods: {
-    click: function(index) {
-      this.$emit('click', index);
+    click: function(item, index) {
+      this.$emit('click', item, index);
     }
   }
 }
