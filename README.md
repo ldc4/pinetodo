@@ -15,5 +15,34 @@ express --no-view --git server
 
 ### vue
 
-先用原生页面写一版
+利用vue-cli工具初始化项目：
+vue create client
+
+## 数据库
+
+选用MongoDB吧，直接上[mongoose](https://mongoosedoc.top/docs/index.html)
+
+将server/config/db.json.template更名为db.json，填写对应的mongodb连接配置
+
+### 实体
+
+#### todospace（待办空间）
+
+```
+Todo：待办
+---
+id 唯一标识
+content 内容
+createTime 创建时间
+updateTime 更新时间
+creator 创建人
+editor  编辑人
+```
+
+### 约定
+
+增删改查：add/get/edit/remove
+
+
+
 
