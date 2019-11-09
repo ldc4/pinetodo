@@ -49,33 +49,31 @@ export default {
     return {
       status: 'todo',   // 工作状态：(todo - 未开始 | doing - 正在进行 | done - 完成)
       curRecord: {},
-      index: 0,         // 新加的索引
       records: [
-        {
-          key: 'x-1',
-          period: 1,
-          startTime: 1567876016,
-          completeTime: 1567876020,
-          endTime: 1567876033,
-          content: "完成了一个demo",
-        },
-        {
-          key: 'x-2',
-          period: 1,
-          startTime: 1567775016,
-          completeTime: 1567775020,
-          endTime: 1567775033,
-          content: "测试完成",
-        },
-        {
-          key: 'x-3',
-          period: 1,
-          startTime: 1567774900,
-          completeTime: 1567774960,
-          endTime: 1567774999,
-          content: "正在测试",
-        }
+        // {
+        //   key: 'x-1',
+        //   period: 1,
+        //   startTime: 1567876016,
+        //   completeTime: 1567876020,
+        //   endTime: 1567876033,
+        //   content: "完成了一个demo",
+        // }
       ]
+    }
+  },
+  async created() {
+    const { code, data } = await this.$api('getRecordList')
+    if (code === 0) {
+      this.records = data.map((record) => {
+        return {
+          key: record._id,
+          period: record.period,
+          startTime: record.startTime,
+          completeTime: record.completeTime,
+          endTime: record.endTime,
+          content: record.content,
+        }
+      }).filter(t => t.content).reverse()
     }
   },
   methods: {
@@ -83,9 +81,8 @@ export default {
     start: function() {
       this.status = 'doing';
       this.curRecord = {
-        key: this.index++,
         startTime: dayjs().unix(),
-        period: 1,
+        period: 5,
         content: ''
       };
     },
@@ -94,7 +91,7 @@ export default {
       this.status = 'done';
       this.curRecord = {
         ...this.curRecord,
-        completedTime: dayjs().unix()
+        completeTime: dayjs().unix()
       }
     },
     // 取消工作
@@ -103,13 +100,25 @@ export default {
       this.status = 'todo';
     },
     // 创建记录
-    createRecord: function() {
+    createRecord: async function() {
       this.curRecord = {
         ...this.curRecord,
         endTime: dayjs().unix()
       }
-      this.records.unshift(this.curRecord);
-      this.curRecord = {};
+      if (this.curRecord.content) {
+        const { code, data } = await this.$api('addRecord', this.curRecord)
+        if (code === 0) {
+          this.records.unshift({
+            key: data._id,
+            period: data.period,
+            startTime: data.startTime,
+            completeTime: data.completeTime,
+            endTime: data.endTime,
+            content: data.content,
+          });
+          this.curRecord = {};
+        }
+      }
       this.status = 'todo';
     }
   },

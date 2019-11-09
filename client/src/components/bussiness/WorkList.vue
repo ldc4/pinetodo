@@ -87,4 +87,8 @@ export default {
   padding-right: .8em;
   color: #999;
 }
+.record-content {
+  float: left;
+  white-space: pre;
+}
 </style>

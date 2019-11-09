@@ -3,18 +3,22 @@ const { ObjectID } = require('mongodb')
 
 const schema = new Schema({
   content: String,
+  period: Number,
+  startTime: Number,
+  completeTime: Number,
+  endTime: Number,
   createTime: Date,
   updateTime: Date,
   creator: String,
   editor: String,
 });
 
-const Todo = model('Todo', schema);
+const Record = model('Record', schema);
 
 module.exports = {
   async add(item) {
     try {
-      const result = await Todo.create({
+      const result = await Record.create({
         ...item,
         createTime: Date.now(),
         updateTime: Date.now(),
@@ -28,7 +32,7 @@ module.exports = {
   },
   async remove(id) {
     try {
-      const result = await Todo.remove({ '_id': ObjectID(id) });
+      const result = await Record.remove({ '_id': ObjectID(id) });
       return result
     } catch (e) {
       console.log('删除失败')
@@ -36,7 +40,7 @@ module.exports = {
   },
   async edit(id, item) {
     try {
-      const result = await Todo.update({ '_id': ObjectID(id) }, {
+      const result = await Record.update({ '_id': ObjectID(id) }, {
         ...item,
         updateTime: Date.now(),
         editor: ''
@@ -48,7 +52,7 @@ module.exports = {
   },
   async get(id) {
     try {
-      const result = await Todo.findById(id);
+      const result = await Record.findById(id);
       return result
     } catch (e) {
       console.log('查询失败')
@@ -56,7 +60,7 @@ module.exports = {
   },
   async getAll() {
     try {
-      const result = await Todo.find({});
+      const result = await Record.find({});
       return result
     } catch (e) {
       console.log('查询失败')

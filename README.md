@@ -24,6 +24,10 @@ vue create client
 
 将server/config/db.json.template更名为db.json，填写对应的mongodb连接配置
 
+### 约定
+
+增删改查：add/get/edit/remove
+
 ### 实体
 
 #### todospace（待办空间）
@@ -32,17 +36,29 @@ vue create client
 Todo：待办
 ---
 id 唯一标识
-content 内容
+content 待办内容
 createTime 创建时间
 updateTime 更新时间
 creator 创建人
 editor  编辑人
 ```
 
-### 约定
+#### workspace（工作空间）
 
-增删改查：add/get/edit/remove
-
+```
+Record：记录
+---
+id 唯一标识
+content 记录内容
+period 记录周期
+startTime 开始时间
+completeTime 完成时间
+endTime 结束时间
+createTime 创建时间
+updateTime 更新时间
+creator 创建人
+editor  编辑人
+```
 
 
 

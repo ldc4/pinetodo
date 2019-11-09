@@ -13,5 +13,15 @@ export default {
     label: '完成待办事项',
     url: '/todospace/removeTodo',
     method: 'post'
+  },
+  getRecordList: {
+    label: '获取记录列表',
+    url: '/workspace/getRecordList',
+    method: 'get'
+  },
+  addRecord: {
+    label: '添加工作记录',
+    url: '/workspace/addRecord',
+    method: 'post'
   }
 }
