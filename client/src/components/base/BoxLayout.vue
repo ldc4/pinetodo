@@ -22,8 +22,7 @@ export default {
   zoom: 1;
   margin: 0;
   padding-left: 1em;
-  float: left;
-  width: 50%;
+  width: 100%;
 }
 .box {
   background-color: #FFF;
@@ -32,7 +31,6 @@ export default {
   position: relative;
   border: 1px solid #DDD;
   box-shadow: 0 2px 0 rgba(225,225,225,.2);
-  
 }
 .box-header {
   box-shadow: #FFF 0 1px 0;

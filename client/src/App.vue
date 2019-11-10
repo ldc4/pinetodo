@@ -89,4 +89,11 @@ a img {
   padding: 0;
   margin: 0 0 0 -1em;
 }
+.content::after {
+  display:block; 
+  content:"clear"; 
+  clear:both; 
+  line-height:0;
+  visibility:hidden;
+}
 </style>

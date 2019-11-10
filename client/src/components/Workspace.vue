@@ -126,5 +126,16 @@ export default {
 </script>
 
 <style scoped>
-
+.workspace {
+  min-width: 27em;
+  width: 50%;
+  float: left;
+}
+.workspace::after {
+  display:block; 
+  content:"clear"; 
+  clear:both; 
+  line-height:0;
+  visibility:hidden;
+}
 </style>

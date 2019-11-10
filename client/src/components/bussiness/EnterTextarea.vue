@@ -83,7 +83,7 @@ textarea:focus + .result-submit {
   height: 1.4em;
   padding-right: 1.8em;
   min-height: 2.5em;
-  line-height: 2em;
+  line-height: 1.4em;
   padding: .5em 1.5em .5em .5em;
   position: relative;
   font-size: 1em;

@@ -76,5 +76,16 @@ export default {
 </script>
 
 <style scoped>
-
+.todospace {
+  min-width: 27em;
+  width: 50%;
+  float: left;
+}
+.todospace::after {
+  display:block; 
+  content:"clear"; 
+  clear:both; 
+  line-height:0;
+  visibility:hidden;
+}
 </style>

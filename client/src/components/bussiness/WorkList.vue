@@ -51,9 +51,10 @@ export default {
 <style scoped>
 .work-list {
   min-height: 15em;
-  max-height: 20em;
+  max-height: 60em;
   padding: 1em .3em 0;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
   list-style: none;
   font-size: .9em;
   line-height: 1.5em;
@@ -84,11 +85,12 @@ export default {
 }
 .record-time {
   float: left;
-  padding-right: .8em;
+  width: 25%;
   color: #999;
 }
 .record-content {
   float: left;
-  white-space: pre;
+  width: 75%;
+  white-space: pre-wrap;
 }
 </style>
