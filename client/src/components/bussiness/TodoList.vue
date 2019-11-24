@@ -7,12 +7,12 @@
           :key="item.key"
         >
           <div class="item-content">
-            <div class="check-container" @click="click(item, index)">
+            <div class="check-container" @click="select(item, index)">
               <span class="check">
                 <CheckIcon :checked="item.checked" />
               </span>
             </div>
-            <span class="value">{{ item.value }}</span>
+            <span class="value" @click="click(item, index)">{{ item.value }}</span>
             <span class="tool">
               <slot></slot>
             </span>
@@ -47,8 +47,11 @@ export default {
     },
   },
   methods: {
-    click: function(item, index) {
+    click(item, index) {
       this.$emit('click', item, index);
+    },
+    select(item, index) {
+      this.$emit('select', item, index);
     }
   }
 }
@@ -77,6 +80,7 @@ export default {
   margin-right: 5px;
   line-height: 22px;
   word-wrap: break-word;
+  cursor: pointer;
 }
 .item-content .check-container {
   display: inline-block;

@@ -5,7 +5,7 @@
         <EnterInput v-model="newTodo" placeholder="添加待办事项" @create="create" />
       </template>
       <template #main>
-        <TodoList :data="todos" @click="done" />
+        <TodoList :data="todos" @select="done" @click="paste" />
       </template>
     </BoxLayout>
   </div>
@@ -15,6 +15,7 @@
 import BoxLayout from './base/BoxLayout.vue'
 import TodoList from './bussiness/TodoList.vue'
 import EnterInput from './bussiness/EnterInput.vue'
+import { mapMutations } from 'vuex'
 
 export default {
   name: 'Todospace',
@@ -49,8 +50,9 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['pasteTodo2Work']),
     // 创建todo
-    create: async function() {
+    async create() {
       if (this.newTodo) {
         const { code, data } = await this.$api('addTodo', { content: this.newTodo })
         if (code === 0) {
@@ -63,13 +65,17 @@ export default {
       }
     },
     // 完成todo
-    done: async function(item, index) {
+    async done(item, index) {
       if (index >= 0 && index < this.todos.length) {
         const { code } = await this.$api('removeTodo', { id: item.key })
         if (code === 0) {
           this.todos.splice(index, 1);
         }
       }
+    },
+    // 复制到工作空间
+    paste(item, index) {
+      this.pasteTodo2Work(item.value)
     }
   }
 }

@@ -30,6 +30,7 @@ import Timer from './bussiness/Timer.vue'
 import StartButton from './bussiness/StartButton.vue'
 import EnterTextarea from './bussiness/EnterTextarea.vue'
 import WorkList from './bussiness/WorkList.vue'
+import { mapState, mapMutations } from 'vuex'
 
 import dayjs from 'dayjs'
 
@@ -61,6 +62,9 @@ export default {
       ]
     }
   },
+  computed: {
+    ...mapState(['pasteData'])
+  },
   async created() {
     const { code, data } = await this.$api('getRecordList')
     if (code === 0) {
@@ -77,6 +81,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['clearPastData']),
     // 开始工作
     start: function() {
       this.status = 'doing';
@@ -122,6 +127,19 @@ export default {
       this.status = 'todo';
     }
   },
+  watch: {
+    pasteData(newData, oldData) {
+      // 通过监听粘贴待办的数据内容发生变化，来设置当前工作记录的内容
+      if (newData !== oldData && newData && this.status === 'done') {
+        if (this.curRecord.content) {
+          this.curRecord.content += ` + ${newData}`
+        } else {
+          this.$set(this.curRecord, 'content', newData)
+        }
+        this.clearPastData()
+      }
+    }
+  }
 }
 </script>
 
