@@ -1,5 +1,6 @@
 const { model, Schema } = require('../utils/mongoose')
-const { ObjectID } = require('mongodb')
+const { ObjectID } = require('mongodb');
+const { getWithDel } = require('./todo');
 
 const schema = new Schema({
   content: String,
@@ -11,6 +12,7 @@ const schema = new Schema({
   updateTime: Date,
   creator: String,
   editor: String,
+  property: Number,
 });
 
 const Record = model('Record', schema);
@@ -23,7 +25,8 @@ module.exports = {
         createTime: Date.now(),
         updateTime: Date.now(),
         creator: '',
-        editor: ''
+        editor: '',
+        property: 0,
       });
       return result
     } catch (e) {
@@ -32,7 +35,11 @@ module.exports = {
   },
   async remove(id) {
     try {
-      const result = await Record.remove({ '_id': ObjectID(id) });
+      const result = await Record.update({ '_id': ObjectID(id) }, {
+        property: 1,
+        updateTime: Date.now(),
+        editor: ''
+      });
       return result
     } catch (e) {
       console.log('删除失败')
@@ -52,6 +59,14 @@ module.exports = {
   },
   async get(id) {
     try {
+      const result = await Record.findOne({ '_id': ObjectID(id), property: { $ne: 1 } });
+      return result
+    } catch (e) {
+      console.log('查询失败')
+    }
+  },
+  async getWithDel(id) {
+    try {
       const result = await Record.findById(id);
       return result
     } catch (e) {
@@ -60,7 +75,9 @@ module.exports = {
   },
   async getAll() {
     try {
-      const result = await Record.find({});
+      const result = await Record.find({
+        property: { $ne: 1 }
+      });
       return result
     } catch (e) {
       console.log('查询失败')

@@ -7,6 +7,8 @@ const schema = new Schema({
   updateTime: Date,
   creator: String,
   editor: String,
+  status: Number,
+  property: Number
 });
 
 const Todo = model('Todo', schema);
@@ -19,7 +21,9 @@ module.exports = {
         createTime: Date.now(),
         updateTime: Date.now(),
         creator: '',
-        editor: ''
+        editor: '',
+        status: 1,
+        property: 0
       });
       return result
     } catch (e) {
@@ -28,7 +32,11 @@ module.exports = {
   },
   async remove(id) {
     try {
-      const result = await Todo.remove({ '_id': ObjectID(id) });
+      const result = await Todo.update({ '_id': ObjectID(id) }, {
+        property: 1,
+        updateTime: Date.now(),
+        editor: ''
+      });
       return result
     } catch (e) {
       console.log('删除失败')
@@ -48,19 +56,56 @@ module.exports = {
   },
   async get(id) {
     try {
+      const result = await Todo.findOne({ '_id': ObjectID(id), property: { $ne: 1 } });
+      return result
+    } catch (e) {
+      console.log('查询失败')
+    }
+  },
+  async getWithDel(id) {
+    try {
       const result = await Todo.findById(id);
       return result
     } catch (e) {
       console.log('查询失败')
     }
   },
-  async getAll() {
+  // 获取所有未完成的
+  async getAllTodo() {
     try {
-      const result = await Todo.find({});
+      const result = await Todo.find({
+        status: 1,
+        property: { $ne: 1 }
+      });
       return result
     } catch (e) {
-      console.log('查询失败')
+      console.log('查询未完成的todo失败')
     }
   },
+  // 获取所有已完成的
+  async getAllCompleted() {
+    try {
+      const result = await Todo.find({
+        status: 2,
+        property: { $ne: 1 }
+      });
+      return result
+    } catch (e) {
+      console.log('查询已完成的todo失败')
+    }
+  },
+  // 完成待办
+  async complete(id) {
+    try {
+      const result = await Todo.update({ '_id': ObjectID(id) }, {
+        status: 2,
+        updateTime: Date.now(),
+        editor: ''
+      });
+      return result
+    } catch (e) {
+      console.log('完成待办失败')
+    }
+  }
 }
 

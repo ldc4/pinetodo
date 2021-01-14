@@ -9,8 +9,18 @@ export default {
     url: '/todospace/addTodo',
     method: 'post'
   },
-  removeTodo: {
+  editTodo: {
+    label: '编辑待办事项',
+    url: '/todospace/editTodo',
+    method: 'post'
+  },
+  completeTodo: {
     label: '完成待办事项',
+    url: '/todospace/completeTodo',
+    method: 'post'
+  },
+  removeTodo: {
+    label: '删除待办事项',
     url: '/todospace/removeTodo',
     method: 'post'
   },

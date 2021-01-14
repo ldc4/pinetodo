@@ -41,6 +41,8 @@ createTime 创建时间
 updateTime 更新时间
 creator 创建人
 editor  编辑人
+status  状态（1 - 未完成，2 - 完成）
+property 特殊属性（0 - 存在，1 - 删除）
 ```
 
 #### workspace（工作空间）
@@ -58,6 +60,7 @@ createTime 创建时间
 updateTime 更新时间
 creator 创建人
 editor  编辑人
+property 特殊属性（0 - 存在，1 - 删除）
 ```
 
 

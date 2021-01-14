@@ -14,6 +14,17 @@ router.post('/addTodo', async function(req, res, next) {
   });
 });
 
+router.post('/completeTodo', async function(req, res, next) {
+  const { id } = req.body
+  if (!id) { res.send({ code: -1, msg: 'ID不存在' }); return; }
+  const result = await todoModel.complete(id)
+  res.send({
+    code: 0,
+    data: result,
+    msg: ''
+  });
+});
+
 router.post('/removeTodo', async function(req, res, next) {
   const { id } = req.body
   if (!id) { res.send({ code: -1, msg: 'ID不存在' }); return; }
@@ -49,7 +60,7 @@ router.get('/getTodo', async function(req, res, next) {
 });
 
 router.get('/getTodoList', async function(req, res, next) {
-  const result = await todoModel.getAll()
+  const result = await todoModel.getAllTodo()
   res.send({
     code: 0,
     data: result,

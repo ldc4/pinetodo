@@ -8,14 +8,29 @@
         >
           <div class="item-content">
             <div class="check-container" @click="select(item, index)">
-              <span class="check">
+              <div class="check">
                 <CheckIcon :checked="item.checked" />
-              </span>
+              </div>
             </div>
-            <span class="value" @click="click(item, index)">{{ item.value }}</span>
-            <span class="tool">
-              <slot></slot>
-            </span>
+            <div class="value" @click="click(item, index)">
+              <div v-if="!item.isEdit" class="value-content">{{ item.value }}</div>
+              <div v-else class="value-edit">
+                <EnterInput class="value-edit-input" type="mini" v-model="item.value" placeholder="编辑待办事项" @enter="edit(item, index)" />
+                <div class="value-edit-cancel">
+                  <CancelIcon @click="cancelEdit(item)" />
+                </div>
+              </div>
+              <div v-if="!item.isEdit" class="tool-container tool-container-left">
+                <div class="tool-item">
+                  <EditIcon @click="showEdit(item)" />
+                </div>
+              </div>
+            </div>
+            <div v-if="!item.isEdit" class="tool-container tool-container-right">
+              <div class="tool-item">
+                <DeleteIcon @click="remove(item, index)" />
+              </div>
+            </div>
           </div>
         </li>
       </ul>
@@ -32,12 +47,20 @@
 <script>
 import EmptyIcon from '../icon/EmptyIcon.vue';
 import CheckIcon from '../icon/CheckIcon.vue';
+import DeleteIcon from '../icon/DeleteIcon.vue';
+import EditIcon from '../icon/EditIcon.vue';
+import EnterInput from '../bussiness/EnterInput.vue'
+import CancelIcon from '../icon/CancelIcon.vue'
 
 export default {
   name: 'TodoList',
   components: {
     EmptyIcon,
-    CheckIcon
+    CheckIcon,
+    DeleteIcon,
+    EditIcon,
+    EnterInput,
+    CancelIcon,
   },
   props: {
     isRadioClick: Boolean,
@@ -46,12 +69,30 @@ export default {
       default: () => [],
     },
   },
+  data() {
+    return {
+      isEdit: false,
+    }
+  },
   methods: {
     click(item, index) {
       this.$emit('click', item, index);
     },
     select(item, index) {
       this.$emit('select', item, index);
+    },
+    remove(item, index) {
+      this.$emit('remove', item, index);
+    },
+    showEdit(item) {
+      this.$set(item, 'isEdit', true)
+    },
+    cancelEdit(item) {
+      this.$set(item, 'isEdit', false)
+    },
+    edit(item, index) {
+      this.cancelEdit(item)
+      this.$emit('edit', item, index);
     }
   }
 }
@@ -64,8 +105,8 @@ export default {
 .todo-list > ul > li {
   border-bottom: 1px solid #eee;
 }
+
 .item-content {
-  border-top: 1px solid #fff;
   position: relative;
   padding: 5px 3px;
   display: flex;
@@ -73,39 +114,71 @@ export default {
 .item-content:hover {
   background: #F9F9F9;
 }
-.item-content .value {
-  font-size: .9rem;
-  flex: 1;
-  align-items: center;
-  margin-right: 5px;
-  line-height: 22px;
-  word-wrap: break-word;
-  cursor: pointer;
-}
+
 .item-content .check-container {
-  display: inline-block;
   padding: 2px 3px;
 }
 .item-content .check {
-  display: inline-block;
   padding: 0;
   border: 1px solid #C6C6C6;
-  border-radius: 1em;
-  width: 17px;
-  height: 17px;
-  font-size: 1em;
+  border-radius: 16px;
+  width: 16px;
+  height: 16px;
   cursor: pointer;
   position: relative;
   overflow: visible;
   background-color: #FFF;
 }
+
+.item-content .value {
+  font-size: 14px;
+  flex: 1;
+  margin-right: 5px;
+  line-height: 22px;
+  word-wrap: break-word;
+  display: flex;
+}
+
+.item-content .value-content {
+  margin-right: 10px;
+}
+
+.item-content .value-edit {
+  flex: 1;
+  display: flex;
+}
+
+.value-edit-input {
+  position: relative;
+  flex: 1;
+}
+
+.value-edit-cancel {
+  height: 16px;
+  width: 16px;
+  margin-left: 5px;
+  align-self: center;
+}
+
+.item-content .tool-container {
+  display: none;
+  align-self: center;
+}
+.item-content:hover .tool-container {
+  display: inline-block;
+}
+.item-content .tool-item {
+  height: 16px;
+  width: 16px;
+  cursor: pointer;
+}
 .empty {
   text-align: center;
-  margin-top: 1em;
-  padding: 1em;
+  margin-top: 16px;
+  padding: 16px;
 }
 .msg-empty {
-  margin: 1em;
+  margin: 16px;
   color: #999;
 }
 </style>

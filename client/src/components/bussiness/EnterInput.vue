@@ -1,5 +1,5 @@
 <template>
-  <div class="enter-input">
+  <div :class="`enter-input ${typeClass}`">
     <input
       class="input"
       type="text"
@@ -7,9 +7,9 @@
       v-on="inputListeners"
       :value="value"
       @input="input"
-      @keyup.enter="create"
+      @keyup.enter="handleEnter"
     />
-    <div class="enter" @click="create">
+    <div class="enter" @click="handleEnter">
       <EnterIcon />
     </div>
   </div>
@@ -25,6 +25,10 @@ export default {
   },
   props: {
     value: String,
+    type: {
+      type: String,
+      default: 'normal'
+    },
   },
   data: function() {
     return {}
@@ -45,6 +49,14 @@ export default {
           }
         }
       )
+    },
+    typeClass() {
+      switch(this.type) {
+        case 'mini':
+          return 'mini'
+        default:
+          return ''
+      }
     }
   },
   methods: {
@@ -52,8 +64,8 @@ export default {
       const value = e.target.value;
       this.$emit('input', value);
     },
-    create: function() {
-      this.$emit('create');
+    handleEnter: function() {
+      this.$emit('enter');
     }
   }
 }
@@ -106,5 +118,15 @@ input[type=text] {
   transition: all .1s linear;
   cursor: pointer;
   opacity: 0;
+}
+
+.mini .input {
+  min-height: 1.5em;
+  line-height: 1em;
+  height: 1.5em;
+}
+.mini .enter {
+  height: 1em;
+  padding: .1em;
 }
 </style>

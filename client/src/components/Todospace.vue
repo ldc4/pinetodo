@@ -2,10 +2,16 @@
   <div class="todospace">
     <BoxLayout>
       <template #header>
-        <EnterInput v-model="newTodo" placeholder="添加待办事项" @create="create" />
+        <EnterInput v-model="newTodo" placeholder="添加待办事项" @enter="create" />
       </template>
       <template #main>
-        <TodoList :data="todos" @select="done" @click="paste" />
+        <TodoList
+          :data="todos"
+          @select="done"
+          @click="paste"
+          @remove="remove"
+          @edit="edit"
+        />
       </template>
     </BoxLayout>
   </div>
@@ -67,15 +73,38 @@ export default {
     // 完成todo
     async done(item, index) {
       if (index >= 0 && index < this.todos.length) {
-        const { code } = await this.$api('removeTodo', { id: item.key })
+        const { code } = await this.$api('completeTodo', { id: item.key })
         if (code === 0) {
           this.todos.splice(index, 1);
         }
       }
     },
     // 复制到工作空间
-    paste(item, index) {
+    paste(item) {
       this.pasteTodo2Work(item.value)
+    },
+    async remove(item, index) {
+      if (index >= 0 && index < this.todos.length) {
+        const { code } = await this.$api('removeTodo', { id: item.key })
+        if (code === 0) {
+          this.todos.splice(index, 1);
+          this.$message({
+            message: '删除成功',
+            type: 'success'
+          })
+        }
+      }
+    },
+    async edit(item, index) {
+      if (index >= 0 && index < this.todos.length) {
+        const { code } = await this.$api('editTodo', { id: item.key, content: item.value })
+        if (code === 0) {
+          this.$message({
+            message: '修改成功',
+            type: 'success'
+          })
+        }
+      }
     }
   }
 }
