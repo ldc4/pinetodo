@@ -71,7 +71,7 @@ export default {
   },
   data() {
     return {
-      isEdit: false,
+      
     }
   },
   methods: {
@@ -85,13 +85,15 @@ export default {
       this.$emit('remove', item, index);
     },
     showEdit(item) {
+      this.$set(item, 'oldContent', item.content)
       this.$set(item, 'isEdit', true)
     },
     cancelEdit(item) {
+      this.$set(item, 'content', item.oldContent)
       this.$set(item, 'isEdit', false)
     },
     edit(item, index) {
-      this.cancelEdit(item)
+      this.$set(item, 'isEdit', false)
       this.$emit('edit', item, index);
     }
   }

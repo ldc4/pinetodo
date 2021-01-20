@@ -13,12 +13,14 @@
         <EnterTextarea
           v-if="status === 'done'"
           v-model="curRecord.content"
-          @create="createRecord"
+          placeholder="添加工作记录" 
+          :height="100"
+          @enter="createRecord"
           @close="cancel"
         />
       </template>
       <template #main>
-        <WorkList :data="records" />
+        <WorkList :data="records" @edit="editRecord" @remove="removeRecord" />
       </template>
     </BoxLayout>
   </div>
@@ -125,6 +127,31 @@ export default {
         }
       }
       this.status = 'todo';
+    },
+    // 编辑记录
+    async editRecord(item, index) {
+      if (index >= 0 && index < this.records.length) {
+        const { code } = await this.$api('editRecord', { id: item.key, content: item.content })
+        if (code === 0) {
+          this.$message({
+            message: '修改成功',
+            type: 'success'
+          })
+        }
+      }
+    },
+    // 删除记录
+    async removeRecord(item, index) {
+      if (index >= 0 && index < this.records.length) {
+        const { code } = await this.$api('removeRecord', { id: item.key })
+        if (code === 0) {
+          this.records.splice(index, 1);
+          this.$message({
+            message: '删除成功',
+            type: 'success'
+          })
+        }
+      }
     }
   },
   watch: {

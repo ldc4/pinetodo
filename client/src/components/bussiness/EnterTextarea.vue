@@ -2,14 +2,14 @@
   <div class="result">
     <textarea
       class="result-textarea"
-      style="resize: vertical;"
+      :style="`resize: vertical; height: ${height}px`"
       v-bind="$attrs"
       v-on="inputListeners"
       :value="value"
       @input="input"
-      @keyup.ctrl.enter="create"
+      @keyup.ctrl.enter="handleEnter"
     ></textarea>
-    <div class="result-submit" @click="create">
+    <div class="result-submit" @click="handleEnter">
       <EnterIcon />
     </div>
     <span class="close" @click="$emit('close')">×</span>
@@ -25,7 +25,8 @@ export default {
     EnterIcon
   },
   props: {
-    value: String
+    value: String,
+    height: Number,
   },
   computed: {
     inputListeners: function () {
@@ -50,8 +51,8 @@ export default {
       const value = e.target.value;
       this.$emit('input', value);
     },
-    create: function() {
-      this.$emit('create');
+    handleEnter: function() {
+      this.$emit('enter');
     }
   }
 }

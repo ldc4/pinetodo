@@ -33,5 +33,15 @@ export default {
     label: '添加工作记录',
     url: '/workspace/addRecord',
     method: 'post'
+  },
+  editRecord: {
+    label: '编辑工作记录',
+    url: '/workspace/editRecord',
+    method: 'post'
+  },
+  removeRecord: {
+    label: '删除工作记录',
+    url: '/workspace/removeRecord',
+    method: 'post'
   }
 }
