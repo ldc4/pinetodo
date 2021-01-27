@@ -1,0 +1,6 @@
+const baseURL = process.env.NODE_ENV === 'production' ? 'https://todo.weedust.com' : 'http://localhost:8080'
+
+export default {
+  baseURL,
+  timeout: 1000,
+}
