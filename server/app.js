@@ -1,13 +1,17 @@
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const passport = require('passport');
+const passportJWT = require('./utils/passport-jwt')
 
-var indexRouter = require('./routes/index');
-var todospaceRouter = require('./routes/todospace');
-var workspaceRouter = require('./routes/workspace');
+const indexRouter = require('./routes/index');
+const authRouter = require('./routes/auth');
+const userRouter = require('./routes/user');
+const todospaceRouter = require('./routes/todospace');
+const workspaceRouter = require('./routes/workspace');
 
-var app = express();
+const app = express();
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -15,7 +19,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(passport.initialize())
+passportJWT(passport)
+
 app.use('/', indexRouter);
+app.use('/auth', authRouter);
+app.use('/user', userRouter);
 app.use('/todospace', todospaceRouter);
 app.use('/workspace', workspaceRouter);
 

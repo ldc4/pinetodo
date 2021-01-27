@@ -14,14 +14,14 @@ const schema = new Schema({
 const Todo = model('Todo', schema);
 
 module.exports = {
-  async add(item) {
+  async add(item, uid) {
     try {
       const result = await Todo.create({
         ...item,
         createTime: Date.now(),
         updateTime: Date.now(),
-        creator: '',
-        editor: '',
+        creator: uid,
+        editor: uid,
         status: 1,
         property: 0
       });
@@ -30,24 +30,24 @@ module.exports = {
       console.log('保存失败')
     }
   },
-  async remove(id) {
+  async remove(id, uid) {
     try {
-      const result = await Todo.update({ '_id': ObjectID(id) }, {
+      const result = await Todo.updateOne({ '_id': ObjectID(id) }, {
         property: 1,
         updateTime: Date.now(),
-        editor: ''
+        editor: uid
       });
       return result
     } catch (e) {
       console.log('删除失败')
     }
   },
-  async edit(id, item) {
+  async edit(id, item, uid) {
     try {
-      const result = await Todo.update({ '_id': ObjectID(id) }, {
+      const result = await Todo.updateOne({ '_id': ObjectID(id) }, {
         ...item,
         updateTime: Date.now(),
-        editor: ''
+        editor: uid
       });
       return result
     } catch (e) {
@@ -71,9 +71,10 @@ module.exports = {
     }
   },
   // 获取所有未完成的
-  async getAllTodo() {
+  async getAllTodo(uid) {
     try {
       const result = await Todo.find({
+        creator: uid,
         status: 1,
         property: { $ne: 1 }
       });
@@ -83,9 +84,10 @@ module.exports = {
     }
   },
   // 获取所有已完成的
-  async getAllCompleted() {
+  async getAllCompleted(uid) {
     try {
       const result = await Todo.find({
+        creator: uid,
         status: 2,
         property: { $ne: 1 }
       });
@@ -95,12 +97,12 @@ module.exports = {
     }
   },
   // 完成待办
-  async complete(id) {
+  async complete(id, uid) {
     try {
-      const result = await Todo.update({ '_id': ObjectID(id) }, {
+      const result = await Todo.updateOne({ '_id': ObjectID(id) }, {
         status: 2,
         updateTime: Date.now(),
-        editor: ''
+        editor: uid
       });
       return result
     } catch (e) {

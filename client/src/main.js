@@ -3,6 +3,7 @@ import App from './App.vue'
 import Api from './plugins/api'
 import Message from './plugins/message'
 import store from './store'
+import router from './router'
 
 Vue.config.productionTip = false
 
@@ -11,5 +12,6 @@ Vue.use(Message)
 
 new Vue({
   store,
+  router,
   render: h => h(App)
 }).$mount('#app')

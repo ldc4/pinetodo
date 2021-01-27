@@ -18,14 +18,14 @@ const schema = new Schema({
 const Record = model('Record', schema);
 
 module.exports = {
-  async add(item) {
+  async add(item, uid) {
     try {
       const result = await Record.create({
         ...item,
         createTime: Date.now(),
         updateTime: Date.now(),
-        creator: '',
-        editor: '',
+        creator: uid,
+        editor: uid,
         property: 0,
       });
       return result
@@ -33,24 +33,24 @@ module.exports = {
       console.log('保存失败')
     }
   },
-  async remove(id) {
+  async remove(id, uid) {
     try {
-      const result = await Record.update({ '_id': ObjectID(id) }, {
+      const result = await Record.updateOne({ '_id': ObjectID(id) }, {
         property: 1,
         updateTime: Date.now(),
-        editor: ''
+        editor: uid
       });
       return result
     } catch (e) {
       console.log('删除失败')
     }
   },
-  async edit(id, item) {
+  async edit(id, item, uid) {
     try {
-      const result = await Record.update({ '_id': ObjectID(id) }, {
+      const result = await Record.updateOne({ '_id': ObjectID(id) }, {
         ...item,
         updateTime: Date.now(),
-        editor: ''
+        editor: uid
       });
       return result
     } catch (e) {
@@ -73,9 +73,10 @@ module.exports = {
       console.log('查询失败')
     }
   },
-  async getAll() {
+  async getAll(uid) {
     try {
       const result = await Record.find({
+        creator: uid,
         property: { $ne: 1 }
       });
       return result

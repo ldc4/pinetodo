@@ -1,12 +1,30 @@
 <template>
-  <!-- 路由出口 -->
-  <!-- 路由匹配到的组件将渲染在这里 -->
-  <router-view></router-view>
+  <div id="app">
+    <Header />
+    <div class="container">
+      <div class="content">
+        <Workspace />
+        <Todospace />
+      </div>
+    </div>
+    <Footer />
+  </div>
 </template>
 
 <script>
+import Header from '../components/Header.vue'
+import Footer from '../components/Footer.vue'
+import Workspace from '../components/Workspace.vue'
+import Todospace from '../components/Todospace.vue'
+
 export default {
-  name: 'app',
+  name: 'Index',
+  components: {
+    Header,
+    Footer,
+    Workspace,
+    Todospace,
+  },
 }
 </script>
 
@@ -52,5 +70,30 @@ a img {
 }
 * {
   box-sizing: border-box;
+}
+#app {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+}
+.container {
+  width: auto;
+  max-width: 960px;
+  margin: 20px auto;
+  min-height: 640px;
+}
+.content {
+  zoom: 1;
+  padding: 0;
+  margin: 0 0 0 -1em;
+}
+.content::after {
+  display:block; 
+  content:"clear"; 
+  clear:both; 
+  line-height:0;
+  visibility:hidden;
 }
 </style>

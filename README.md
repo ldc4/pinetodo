@@ -63,5 +63,19 @@ editor  编辑人
 property 特殊属性（0 - 存在，1 - 删除）
 ```
 
+#### user (用户)
 
+```
+User: 用户
+---
+id 唯一标识
+uid 用户ID
+username 用户名
+password 密码
+email 邮箱
+phone 电话
+createTime 创建时间
+updateTime 更新时间
+property 特殊属性（0 - 存在，1 - 删除）
+```
 

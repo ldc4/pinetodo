@@ -1,4 +1,24 @@
 export default {
+  login: {
+    label: '登陆',
+    url: '/auth/login',
+    method: 'post'
+  },
+  register: {
+    label: '注册',
+    url: '/auth/register',
+    method: 'post'
+  },
+  checkUsername: {
+    label: '检查用户名',
+    url: '/auth/checkUsername',
+    method: 'get'
+  },
+  getUserInfo: {
+    label: '获取用户信息',
+    url: '/user/getUserInfo',
+    method: 'get'
+  },
   getTodoList: {
     label: '获取待办列表',
     url: '/todospace/getTodoList',
