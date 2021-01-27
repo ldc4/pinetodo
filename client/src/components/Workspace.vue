@@ -89,7 +89,7 @@ export default {
       this.status = 'doing';
       this.curRecord = {
         startTime: dayjs().unix(),
-        period: 5,
+        period: 50 * 60,
         content: ''
       };
     },
