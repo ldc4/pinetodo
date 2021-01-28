@@ -16,7 +16,8 @@ export default new Vuex.Store({
     hasLogin: false,
     userInfo: _.cloneDeep(defaultUserInfo),
     userInfoLoading: false,
-    pasteData: ''
+    pasteData: '',
+    timePeriod: 3000
   },
   mutations: {
     login(state) {

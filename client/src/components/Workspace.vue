@@ -65,7 +65,10 @@ export default {
     }
   },
   computed: {
-    ...mapState(['pasteData'])
+    ...mapState([
+      'pasteData',
+      'timePeriod'
+    ])
   },
   async created() {
     const { code, data } = await this.$api('getRecordList')
@@ -89,7 +92,7 @@ export default {
       this.status = 'doing';
       this.curRecord = {
         startTime: dayjs().unix(),
-        period: 50 * 60,
+        period: this.timePeriod,
         content: ''
       };
     },

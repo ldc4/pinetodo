@@ -20,7 +20,7 @@
             <EnterTextarea
               v-else
               v-model="record.content"
-              placeholder="编辑工作记录" 
+              placeholder="编辑工作记录"
               :height="100"
               @enter="edit(record)"
               @close="cancelEdit(record)"
@@ -81,7 +81,6 @@ export default {
       })
     },
     showEdit(record) {
-      const { key } = record
       _.forEach(this.data, (item) => {
         this.$set(item, 'isEdit', false)
       })

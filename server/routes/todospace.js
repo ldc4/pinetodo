@@ -28,6 +28,18 @@ router.post('/completeTodo', passport.authenticate('jwt', { session: false }), a
   });
 });
 
+router.post('/resetTodo', passport.authenticate('jwt', { session: false }), async function(req, res, next) {
+  const { uid } = req.user
+  const { id } = req.body
+  if (!id) { res.send({ code: -1, msg: 'ID不存在' }); return; }
+  const result = await todoModel.reset(id, uid)
+  res.send({
+    code: 0,
+    data: result,
+    msg: ''
+  });
+});
+
 router.post('/removeTodo', passport.authenticate('jwt', { session: false }), async function(req, res, next) {
   const { uid } = req.user
   const { id } = req.body
@@ -73,5 +85,15 @@ router.get('/getTodoList', passport.authenticate('jwt', { session: false }), asy
     msg: ''
   });
 });
+
+router.get('/getDoneList', passport.authenticate('jwt', { session: false }), async function(req, res, next) {
+  const { uid } = req.user
+  const result = await todoModel.getAllCompleted(uid)
+  res.send({
+    code: 0,
+    data: result,
+    msg: ''
+  });
+})
 
 module.exports = router;

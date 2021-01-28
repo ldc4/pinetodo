@@ -1,5 +1,5 @@
 <template>
-  <div class="todo-list">
+  <div class="done-list">
     <template v-if="data && data.length > 0">
       <ul>
         <li
@@ -16,7 +16,7 @@
               <div v-if="!item.isEdit" class="value-content">{{ item.value }}</div>
               <div v-else class="value-edit">
                 <div class="value-edit-input" @click="stopClick">
-                  <EnterInput type="mini" v-model="item.value" placeholder="编辑待办事项" @enter="edit(item, index)" />
+                  <EnterInput type="mini" v-model="item.value" placeholder="编辑已办事项" @enter="edit(item, index)" />
                 </div>
                 <div class="value-edit-cancel" @click="stopClick">
                   <CancelIcon @click="cancelEdit(item)" />
@@ -39,15 +39,13 @@
     </template>
     <template v-else>
       <div class="empty">
-        <EmptyIcon />
-        <p class="msg-empty">没有待办事项</p>
+        <p class="msg-empty">没有已办事项</p>
       </div>
     </template>
   </div>
 </template>
 
 <script>
-import EmptyIcon from '../icon/EmptyIcon.vue';
 import CheckIcon from '../icon/CheckIcon.vue';
 import DeleteIcon from '../icon/DeleteIcon.vue';
 import EditIcon from '../icon/EditIcon.vue';
@@ -55,9 +53,8 @@ import EnterInput from '../bussiness/EnterInput.vue'
 import CancelIcon from '../icon/CancelIcon.vue'
 
 export default {
-  name: 'TodoList',
+  name: 'DodoList',
   components: {
-    EmptyIcon,
     CheckIcon,
     DeleteIcon,
     EditIcon,
@@ -108,10 +105,11 @@ export default {
 </script>
 
 <style scoped>
-.todo-list {
+.done-list {
   text-align: left;
+  color: #999;
 }
-.todo-list > ul > li {
+.done-list > ul > li {
   border-bottom: 1px solid #eee;
 }
 

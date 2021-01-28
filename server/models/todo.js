@@ -108,6 +108,19 @@ module.exports = {
     } catch (e) {
       console.log('完成待办失败')
     }
+  },
+  // 撤回待办
+  async reset(id, uid) {
+    try {
+      const result = await Todo.updateOne({ '_id': ObjectID(id) }, {
+        status: 1,
+        updateTime: Date.now(),
+        editor: uid
+      });
+      return result
+    } catch (e) {
+      console.log('撤回待办失败')
+    }
   }
 }
 

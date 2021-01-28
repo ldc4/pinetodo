@@ -24,6 +24,11 @@ export default {
     url: '/todospace/getTodoList',
     method: 'get'
   },
+  getDoneList: {
+    lable: '获取已办列表',
+    url: '/todospace/getDoneList',
+    method: 'get'
+  },
   addTodo: {
     label: '添加待办事项',
     url: '/todospace/addTodo',
@@ -37,6 +42,11 @@ export default {
   completeTodo: {
     label: '完成待办事项',
     url: '/todospace/completeTodo',
+    method: 'post'
+  },
+  resetTodo: {
+    label: '撤回待办事项',
+    url: '/todospace/resetTodo',
     method: 'post'
   },
   removeTodo: {
