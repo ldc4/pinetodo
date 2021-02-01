@@ -15,7 +15,7 @@ router.post('/login', async function(req, res, next) {
       id: result.id,
       username
     }
-    jsonwebtoken.sign(rule, authConfig.secretKey, { expiresIn: 3600 }, (err, token) => {
+    jsonwebtoken.sign(rule, authConfig.secretKey, { expiresIn: 3600 * 12 }, (err, token) => {
       if (err) {
         res.send({
           code: -1,
@@ -24,7 +24,7 @@ router.post('/login', async function(req, res, next) {
         return
       }
       // 设置cookie
-      res.cookie('jwt-token', token, { expires: new Date(Date.now() + 8 * 3600 * 1000), httpOnly: true })
+      res.cookie('jwt-token', token, { expires: new Date(Date.now() + 12 * 3600 * 1000), httpOnly: true })
       res.send({
         code: 0,
         data: {
