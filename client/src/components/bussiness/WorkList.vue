@@ -1,11 +1,11 @@
 <template>
   <ul class="work-list">
-    <li v-for="(records, key) in list" :key="key">
+    <li v-for="item in list" :key="item.key">
       <div class="work-content">
-        <div class="work-day">{{key}}</div>
+        <div class="work-day">{{item.title}}</div>
       </div>
       <ul class="record-list">
-        <li v-for="record in records" :key="record.key">
+        <li v-for="record in item.records" :key="record.key">
           <span class="record-time">{{record.time}}</span>
           <div class="record-content-wrap">
             <p v-if="!record.isEdit" class="record-content">{{record.content}}</p>
@@ -61,13 +61,27 @@ export default {
         const sDate = dayjs.unix(startTime).date();
         const sFormatTime = dayjs.unix(startTime).format('HH:mm');
         const eFormatTime = dayjs.unix(endTime).format('HH:mm');
-        if (!worksMap[`${sMonth}月${sDate}日`]) {
-          worksMap[`${sMonth}月${sDate}日`] = [];
+        if (!worksMap[`${sMonth}-${sDate}`]) {
+          worksMap[`${sMonth}-${sDate}`] = [];
         }
         record.time = `${sFormatTime} - ${eFormatTime}`
-        worksMap[`${sMonth}月${sDate}日`].push(record);
+        worksMap[`${sMonth}-${sDate}`].push(record);
       });
-      return worksMap;
+      // 按时间排序
+      const result = []
+      Object.keys(worksMap).sort((a, b) => {
+        const [aM, aD] = a.split('-')
+        const [bM, bD] = b.split('-')
+        return (Number(bM) * 100 + Number(bD)) - (Number(aM) * 100 + Number(aD))
+      }).forEach((key) => {
+        const [m, d] = key.split('-')
+        result.push({
+          key,
+          title: `${m}月${d}日`,
+          records: worksMap[key]
+        })
+      })
+      return result;
     }
   },
   methods: {

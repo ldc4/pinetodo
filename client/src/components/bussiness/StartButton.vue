@@ -1,17 +1,30 @@
 <template>
   <div class="start">
-    <button class="start-btn" v-bind="$attrs" v-on="$listeners">轻松开始</button>
+    <button class="start-btn btn" @click="start">轻松开始</button>
+    <button class="restore-btn btn" @click="restore">补单</button>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'StartButton'
+  name: 'StartButton',
+  methods: {
+    start() {
+      this.$emit('start')
+    },
+    restore() {
+      this.$emit('restore')
+    }
+  }
 }
 </script>
 
 <style scoped>
-.start-btn {
+.start {
+  display: flex;
+  justify-content: space-around;
+}
+.btn {
   width: 100%;
   height: 2.5em;
   line-height: 2.4em;
@@ -42,7 +55,17 @@ export default {
   font-weight: 700;
   white-space: nowrap;
 }
+.start-btn {
+  width: calc(100% - 75px);
+}
 .start-btn:hover {
+  box-shadow: none;
+  background: #f4f4f4;
+}
+.restore-btn {
+  width: 50px;
+}
+.restore-btn:hover {
   box-shadow: none;
   background: #f4f4f4;
 }

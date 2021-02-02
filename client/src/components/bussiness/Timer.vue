@@ -1,14 +1,28 @@
 <template>
-  <div class="timer">
-    <div class="process" :style="{ width: (process/total)*100 + '%' }"></div>
-    <p class="time">{{showTime}}</p>
-    <span class="close" @click="$emit('close')">×</span>
+  <div class="timer-wrap">
+    <div class="timer">
+      <div class="process" :style="{ width: (process/total)*100 + '%' }"></div>
+      <div class="time">
+        <div>{{showTime}}</div>
+        <PauseIcon v-if="status=='doing'" class="pause-icon" @click="handlePause" />
+        <PlayIcon v-else class="play-icon" @click="handleContinue" />
+      </div>
+      <span class="close" @click="$emit('close')">×</span>
+    </div>
+    <button class="finish-btn btn" @click="handleFinish">结束</button>
   </div>
 </template>
 
 <script>
+import PauseIcon from '../icon/PauseIcon'
+import PlayIcon from '../icon/PlayIcon'
+
 export default {
   name: 'Timer',
+  components: {
+    PauseIcon,
+    PlayIcon
+  },
   created() {
     this.timer = setInterval(this.clock, 1000);
   },
@@ -27,6 +41,7 @@ export default {
   },
   data() {
     return {
+      status: 'doing',
       process: this.initProcess
     }
   },
@@ -49,20 +64,35 @@ export default {
     }
   },
   methods: {
-    clock: function() {
+    clock() {
       this.process++;
       this.$emit('clock', this.process);
       if (this.process >= this.total) {
-        clearInterval(this.timer);
-        document.title = '青松土豆';
-        this.$emit('completed');
+        this.handleFinish()
       }
     },
+    handlePause() {
+      this.status = 'pause'
+      clearInterval(this.timer)
+    },
+    handleContinue() {
+      this.status = 'doing'
+      this.timer = setInterval(this.clock, 1000)
+    },
+    handleFinish() {
+      clearInterval(this.timer);
+      document.title = '青松土豆';
+      this.$emit('completed');
+    }
   }
 }
 </script>
 
 <style scoped>
+.timer-wrap {
+  display: flex;
+  justify-content: space-around;
+}
 .timer {
   font-weight: 700;
   color: #666;
@@ -71,7 +101,7 @@ export default {
   border: 1px solid #CCC;
   border-radius: 4px;
   background: #F8F8F8;
-  width: 100%;
+  width: calc(100% - 75px);
   height: 2.5em;
   line-height: 2.4em;
   padding: 0;
@@ -91,7 +121,9 @@ export default {
   border-radius: 3px 0 0 3px;
 }
 .time {
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .close {
   color: #9C9C97;
@@ -109,5 +141,47 @@ export default {
   font-size: 1rem;
   position: absolute;
   text-align: center;
+}
+.btn {
+  width: 100%;
+  height: 2.5em;
+  line-height: 2.4em;
+  padding: 0;
+  position: relative;
+  font-size: 1em;
+
+  display: inline-block;
+  vertical-align: middle;
+  text-shadow: 0 1px 0 rgba(255,255,255,.9);
+  color: #666;
+  background-color: #f8f8f9;
+  background: -webkit-gradient(linear,left top,left bottom,from(#f8f8f9),to(#e6e6e8));
+  background: -webkit-linear-gradient(top,#f8f8f9,#e6e6e8);
+  background: -moz-linear-gradient(top,#f8f8f9,#e6e6e8);
+  background: -ms-linear-gradient(top,#f8f8f9,#e6e6e8);
+  background: -o-linear-gradient(top,#f8f8f9,#e6e6e8);
+  box-shadow: 0 1px 0 #fff inset, 0 1px 0 rgba(0,0,0,.1);
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+  cursor: pointer;
+  border: 1px solid #BBB;
+
+  font-weight: 700;
+  white-space: nowrap;
+}
+.finish-btn {
+  width: 50px;
+}
+.pause-icon {
+  margin: 5px;
+  cursor: pointer;
+}
+.play-icon {
+  margin: 5px;
+  cursor: pointer;
 }
 </style>

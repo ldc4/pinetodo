@@ -20,13 +20,21 @@ const Record = model('Record', schema);
 module.exports = {
   async add(item, uid) {
     try {
+      const { period, completeTime } = item
+      let property = 0
+      if (period <= 0) {
+        property = 2  // 2代表补单
+      }
+      if (completeTime < endTime) {
+        property = 3  // 3代表提前完成
+      }
       const result = await Record.create({
         ...item,
         createTime: Date.now(),
         updateTime: Date.now(),
         creator: uid,
         editor: uid,
-        property: 0,
+        property,
       });
       return result
     } catch (e) {

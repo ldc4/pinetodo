@@ -2,22 +2,34 @@
   <div class="workspace">
     <BoxLayout>
       <template #header>
-        <StartButton v-if="status === 'todo'" @click="start" />
+        <StartButton v-if="status === 'todo'" @start="start" @restore="restore" />
         <Timer
           v-if="status === 'doing'"
           :initProcess="0"
           :total="curRecord.period"
           @completed="completed"
+          @finished="finished"
           @close="cancel"
         />
-        <EnterTextarea
-          v-if="status === 'done'"
-          v-model="curRecord.content"
-          placeholder="添加工作记录" 
-          :height="100"
-          @enter="createRecord"
-          @close="cancel"
-        />
+        <div v-if="status === 'done'">
+          <div v-if="curRecord.period <= 0" class="time-edit">
+            <div class="start-time">
+              <div class="time-label">开始时间</div>
+              <div class="time-input-wrap"><input class="time-input" v-model="startTime" :placeholder="timePlaceholder" /></div>
+            </div>
+            <div class="end-time">
+              <div class="time-label">结束时间</div>
+              <div class="time-input-wrap"><input class="time-input" v-model="endTime" :placeholder="timePlaceholder" /></div>
+            </div>
+          </div>
+          <EnterTextarea
+            v-model="curRecord.content"
+            placeholder="添加工作记录"
+            :height="100"
+            @enter="createRecord"
+            @close="cancel"
+          />
+        </div>
       </template>
       <template #main>
         <WorkList :data="records" @edit="editRecord" @remove="removeRecord" />
@@ -61,7 +73,11 @@ export default {
         //   endTime: 1567876033,
         //   content: "完成了一个demo",
         // }
-      ]
+      ],
+      startTime: '',
+      endTime: '',
+      timePlaceholder: '',
+      timeFormat: 'MM-DD HH:mm:ss'
     }
   },
   computed: {
@@ -116,7 +132,22 @@ export default {
         endTime: dayjs().unix()
       }
       if (this.curRecord.content) {
-        const { code, data } = await this.$api('addRecord', this.curRecord)
+        if (this.curRecord.period <= 0) {
+          const startTimeObj = dayjs(this.startTime, this.timeFormat)
+          const endTimeObj = dayjs(this.endTime, this.timeFormat)
+          if (startTimeObj.isValid() && endTimeObj.isValid()) {
+            this.curRecord.startTime = startTimeObj.unix()
+            this.curRecord.completeTime = endTimeObj.unix()
+            this.curRecord.endTime = endTimeObj.unix()
+          } else {
+            this.$message({
+              message: '时间格式错误',
+              type: 'error'
+            })
+            return
+          }
+        }
+        const { code, data, msg } = await this.$api('addRecord', this.curRecord)
         if (code === 0) {
           this.records.unshift({
             key: data._id,
@@ -127,9 +158,14 @@ export default {
             content: data.content,
           });
           this.curRecord = {};
+          this.status = 'todo';
+        } else {
+          this.$message({
+            message: msg,
+            type: 'error'
+          })
         }
       }
-      this.status = 'todo';
     },
     // 编辑记录
     async editRecord(item, index) {
@@ -155,6 +191,19 @@ export default {
           })
         }
       }
+    },
+    // 补单
+    restore() {
+      this.status = 'done';
+      this.curRecord = {
+        startTime: dayjs().unix(),
+        period: -1, // -1 说明不是走的计时，而是补的单
+        content: '',
+      }
+      const timeStr = dayjs().format(this.timeFormat)
+      this.startTime = timeStr
+      this.endTime = timeStr
+      this.timePlaceholder = timeStr
     }
   },
   watch: {
@@ -185,5 +234,27 @@ export default {
   clear:both; 
   line-height:0;
   visibility:hidden;
+}
+.time-edit {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-bottom: 15px;
+}
+.start-time {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.end-time {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.time-label {
+  width: 70px;
+}
+.time-input {
+  width: 135px;
 }
 </style>
