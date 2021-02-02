@@ -60,7 +60,7 @@ createTime 创建时间
 updateTime 更新时间
 creator 创建人
 editor  编辑人
-property 特殊属性（0 - 存在，1 - 删除, 2 - 补单, 3 - 提前结束）
+property 特殊属性（0 - 存在，1 - 删除, 2 - 补单）
 ```
 
 #### user (用户)
@@ -79,3 +79,6 @@ updateTime 更新时间
 property 特殊属性（0 - 存在，1 - 删除）
 ```
 
+## 遗留问题
+
+用setInterval的时间精度，有误差，勉强还能容忍，大概+3s左右
