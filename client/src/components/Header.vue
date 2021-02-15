@@ -17,20 +17,22 @@
           </div>
           <ul v-if="showDropdown" class="dropdown">
             <!-- <li class="dropdown-item">个人信息</li> -->
-            <!-- <li class="dropdown-item">设置</li> -->
+            <li class="dropdown-item" @click="handleSetting">设置</li>
             <li class="dropdown-item" @click="handleLogout">登出</li>
           </ul>
         </div>
       </div>
       <LoadingIcon class="loading" v-else></LoadingIcon>
     </div>
+    <SettingDialog :visible.sync="showDialog"></SettingDialog>
   </header>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import LoadingIcon from './icon/LoadingIcon'
 import DropdownIcon from './icon/DropdownIcon'
+import SettingDialog from './bussiness/SettingDialog.vue'
 
 export default {
   name: 'Header',
@@ -39,11 +41,13 @@ export default {
   },
   components: {
     LoadingIcon,
-    DropdownIcon
+    DropdownIcon,
+    SettingDialog
   },
   data() {
     return {
-      showDropdown: false
+      showDropdown: false,
+      showDialog: false,
     }
   },
   computed: {
@@ -54,20 +58,8 @@ export default {
     ])
   },
   created() {
-    const { isLogin } = this.$store.state
-    if (!isLogin) {
-      this.$store.commit('setUserInfoLoading', true)
-      this.$api('getUserInfo').then((response) => {
-        const { code, data } = response
-        if (code === 0) {
-          const { userInfo } = data
-          this.$store.commit('setUserInfo', userInfo)
-          this.$store.commit('login')
-        }
-      }).finally(() => {
-        this.$store.commit('setUserInfoLoading', false)
-      })
-    }
+    this.getUserInfo()
+    this.getSetting()
   },
   mounted() {
     window.addEventListener("click", this.handleWindowClick);
@@ -76,6 +68,10 @@ export default {
     window.removeEventListener('click', this.handleWindowClick);
   },
   methods: {
+    ...mapActions([
+      'getUserInfo',
+      'getSetting'
+    ]),
     handleLogin() {
       this.$router.push({
         path: '/login'
@@ -96,6 +92,10 @@ export default {
           this.showDropdown = false
         }
       }
+    },
+    handleSetting() {
+      this.showDropdown = false
+      this.showDialog = true
     }
   }
 }

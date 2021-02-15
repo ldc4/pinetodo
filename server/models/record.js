@@ -1,6 +1,5 @@
 const { model, Schema } = require('../utils/mongoose')
 const { ObjectID } = require('mongodb');
-const { getWithDel } = require('./todo');
 
 const schema = new Schema({
   content: String,
@@ -20,7 +19,7 @@ const Record = model('Record', schema);
 module.exports = {
   async add(item, uid) {
     try {
-      const { period, completeTime, startTime } = item
+      const { period } = item
       let property = 0
       if (period <= 0) {
         property = 2  // 2代表补单

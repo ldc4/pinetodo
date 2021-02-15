@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import _ from 'lodash'
+import { api } from '../plugins/api'
 
 Vue.use(Vuex)
 
@@ -11,13 +12,18 @@ const defaultUserInfo = {
   phone: ''
 }
 
+const defaultSetting = {
+  period: 3000,
+}
+
 export default new Vuex.Store({
   state: {
     hasLogin: false,
     userInfo: _.cloneDeep(defaultUserInfo),
     userInfoLoading: false,
-    pasteData: '',
-    timePeriod: 3000
+    setting: _.cloneDeep(defaultSetting),
+    settingLoading: false,
+    pasteData: ''
   },
   mutations: {
     login(state) {
@@ -33,6 +39,12 @@ export default new Vuex.Store({
     setUserInfoLoading(state, payload) {
       state.userInfoLoading = payload
     },
+    setSetting(state, payload = {}) {
+      state.setting = Object.assign({}, state.setting, payload)
+    },
+    setSettingLoading(state, payload) {
+      state.settingLoading = payload
+    },
     pasteTodo2Work(state, payload) {
       state.pasteData = payload
     },
@@ -41,6 +53,33 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    async getUserInfo({ state, commit }) {
+      const { isLogin } = state
+      if (!isLogin) {
+        commit('setUserInfoLoading', true)
+        api('getUserInfo').then((response) => {
+          const { code, data } = response
+          if (code === 0) {
+            const { userInfo } = data
+            commit('setUserInfo', userInfo)
+            commit('login')
+          }
+        }).finally(() => {
+          commit('setUserInfoLoading', false)
+        })
+      }
+    },
+    async getSetting({ commit }) {
+      commit('setSettingLoading', true)
+      api('getSetting').then((response) => {
+        const { code, data } = response
+        if (code === 0) {
+          commit('setSetting', data)
+        }
+      }).finally(() => {
+        commit('setSettingLoading', false)
+      })
+    }
   },
   modules: {
   }

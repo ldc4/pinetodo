@@ -83,7 +83,7 @@ export default {
   computed: {
     ...mapState([
       'pasteData',
-      'timePeriod'
+      'setting'
     ])
   },
   async created() {
@@ -108,7 +108,7 @@ export default {
       this.status = 'doing';
       this.curRecord = {
         startTime: dayjs().unix(),
-        period: this.timePeriod,
+        period: this.setting.period,
         content: ''
       };
     },

@@ -10,6 +10,7 @@ const authRouter = require('./routes/auth');
 const userRouter = require('./routes/user');
 const todospaceRouter = require('./routes/todospace');
 const workspaceRouter = require('./routes/workspace');
+const settingRouter = require('./routes/setting');
 
 const app = express();
 
@@ -27,5 +28,6 @@ app.use('/auth', authRouter);
 app.use('/user', userRouter);
 app.use('/todospace', todospaceRouter);
 app.use('/workspace', workspaceRouter);
+app.use('/setting', settingRouter);
 
 module.exports = app;

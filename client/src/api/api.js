@@ -19,6 +19,16 @@ export default {
     url: '/user/getUserInfo',
     method: 'get'
   },
+  getSetting: {
+    label: '获取用户配置',
+    url: '/setting/getSetting',
+    method: 'get'
+  },
+  saveSetting: {
+    label: '保存用户配置',
+    url: '/setting/saveSetting',
+    method: 'post'
+  },
   getTodoList: {
     label: '获取待办列表',
     url: '/todospace/getTodoList',

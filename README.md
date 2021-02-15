@@ -79,6 +79,17 @@ updateTime 更新时间
 property 特殊属性（0 - 存在，1 - 删除）
 ```
 
+#### setting (设置)
+```
+Setting: 设置
+---
+id 唯一标识
+uid 用户ID
+period 记录周期
+updateTime 更新时间
+editor 编辑人
+```
+
 ## 遗留问题
 
 用setInterval的时间精度，有误差，勉强还能容忍，大概+3s左右
