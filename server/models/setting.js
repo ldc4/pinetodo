@@ -4,6 +4,7 @@ const { ObjectID } = require('mongodb');
 const schema = new Schema({
   uid: String,
   period: Number,
+  interval: Number,
   createTime: Date,
   updateTime: Date,
   creator: String,

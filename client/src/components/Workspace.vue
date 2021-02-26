@@ -7,8 +7,7 @@
           v-if="status === 'doing'"
           :initProcess="0"
           :total="curRecord.period"
-          @completed="completed"
-          @finished="finished"
+          @finished="completed"
           @close="cancel"
         />
         <div v-if="status === 'done'">
@@ -30,6 +29,14 @@
             @close="cancel"
           />
         </div>
+        <Timer
+          v-if="status === 'rest'"
+          :initProcess="0"
+          :total="curRecord.interval"
+          :noFinish="true"
+          @finished="restFinished"
+          @close="cancel"
+        />
       </template>
       <template #main>
         <WorkList :data="records" @edit="editRecord" @remove="removeRecord" />
@@ -93,6 +100,7 @@ export default {
         return {
           key: record._id,
           period: record.period,
+          interval: record.interval,
           startTime: record.startTime,
           completeTime: record.completeTime,
           endTime: record.endTime,
@@ -109,6 +117,7 @@ export default {
       this.curRecord = {
         startTime: dayjs().unix(),
         period: this.setting.period,
+        interval: this.setting.interval,
         content: ''
       };
     },
@@ -157,8 +166,12 @@ export default {
             endTime: data.endTime,
             content: data.content,
           });
-          this.curRecord = {};
-          this.status = 'todo';
+          if (this.curRecord.period <= 0) {
+            this.curRecord = {};
+            this.status = 'todo';
+          } else {
+            this.status = 'rest';
+          }
         } else {
           this.$message({
             message: msg,
@@ -204,6 +217,11 @@ export default {
       this.startTime = timeStr
       this.endTime = timeStr
       this.timePlaceholder = timeStr
+    },
+    // 休息结束
+    restFinished() {
+      this.curRecord = {};
+      this.status = 'todo';
     }
   },
   watch: {

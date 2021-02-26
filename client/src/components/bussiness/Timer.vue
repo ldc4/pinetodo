@@ -1,15 +1,17 @@
 <template>
   <div class="timer-wrap">
-    <div class="timer">
+    <div :class="{ timer: true, 'no-finish': noFinish }">
       <div class="process" :style="{ width: (process/total)*100 + '%' }"></div>
       <div class="time">
         <div>{{showTime}}</div>
-        <PauseIcon v-if="status=='doing'" class="pause-icon" @click="handlePause" />
-        <PlayIcon v-else class="play-icon" @click="handleContinue" />
+        <template v-if="!noFinish">
+          <PauseIcon v-if="status=='running'" class="pause-icon" @click="handlePause" />
+          <PlayIcon v-else class="play-icon" @click="handleContinue" />
+        </template>
       </div>
       <span class="close" @click="$emit('close')">×</span>
     </div>
-    <button class="finish-btn btn" @click="handleFinish">结束</button>
+    <button v-if="!noFinish" class="finish-btn btn" @click="handleFinish">结束</button>
   </div>
 </template>
 
@@ -37,11 +39,15 @@ export default {
     initProcess: {
       type: Number,
       default: 0
+    },
+    noFinish: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
     return {
-      status: 'doing',
+      status: 'running',
       process: this.initProcess
     }
   },
@@ -76,13 +82,13 @@ export default {
       clearInterval(this.timer)
     },
     handleContinue() {
-      this.status = 'doing'
+      this.status = 'running'
       this.timer = setInterval(this.clock, 1000)
     },
     handleFinish() {
       clearInterval(this.timer);
       document.title = '青松土豆';
-      this.$emit('completed');
+      this.$emit('finished');
     }
   }
 }
@@ -107,6 +113,9 @@ export default {
   padding: 0;
   position: relative;
   font-size: 1em;
+}
+.timer.no-finish {
+  width: 100%;
 }
 .process {
   width: 0%;

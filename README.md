@@ -53,6 +53,7 @@ Record：记录
 id 唯一标识
 content 记录内容
 period 记录周期
+interval 记录间隔
 startTime 开始时间
 completeTime 完成时间
 endTime 结束时间
@@ -86,6 +87,7 @@ Setting: 设置
 id 唯一标识
 uid 用户ID
 period 记录周期
+interval 记录间隔
 updateTime 更新时间
 editor 编辑人
 ```

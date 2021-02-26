@@ -10,6 +10,10 @@
         <div class="item-label">时间周期</div>
         <div class="item-input"><input class="period-input" v-model="setting.period" /></div>
       </div>
+      <div class="setting-item">
+        <div class="item-label">时间间隔</div>
+        <div class="item-input"><input class="interval-input" v-model="setting.interval" /></div>
+      </div>
     </div>
     <div class="footer">
       <button class="confirm-btn btn" @click="confirm">确认</button>
@@ -83,14 +87,15 @@ export default {
 .setting-item {
   display: flex;
   align-items: center;
+  margin-top: 5px;
 }
 .item-label {
   width: 100px;
   text-align: left;
 }
 .btn {
-  height: 30px;
-  width: 50px;
+  height: 25px;
+  width: 40px;
   padding: 0;
   position: relative;
   font-size: 1em;
@@ -122,6 +127,9 @@ export default {
   margin: 10px;
 }
 .period-input {
+  width: 50px;
+}
+.interval-input {
   width: 50px;
 }
 </style>

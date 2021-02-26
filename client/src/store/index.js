@@ -14,6 +14,7 @@ const defaultUserInfo = {
 
 const defaultSetting = {
   period: 3000,
+  interval: 600,
 }
 
 export default new Vuex.Store({

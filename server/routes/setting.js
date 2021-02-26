@@ -15,12 +15,13 @@ router.get('/getSetting', passport.authenticate('jwt', { session: false }), asyn
 
 router.post('/saveSetting', passport.authenticate('jwt', { session: false }), async function(req, res, next) {
   const { id: uid } = req.user;
-  const { period = 3000 } = req.body;
+  const { period = 3000, interval = 600 } = req.body;
   const oldSetting = await settingModel.getByUid(uid);
 
   let newSetting = {
     uid,
-    period
+    period,
+    interval
   };
 
   if (oldSetting) {
