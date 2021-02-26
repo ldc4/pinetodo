@@ -33,6 +33,7 @@ export default new Vuex.Store({
     logout(state) {
       state.hasLogin = false
       state.userInfo = _.cloneDeep(defaultUserInfo)
+      state.setting = _.cloneDeep(defaultSetting)
     },
     setUserInfo(state, payload = {}) {
       state.userInfo = Object.assign({}, state.userInfo, payload)
