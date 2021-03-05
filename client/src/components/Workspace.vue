@@ -84,7 +84,7 @@ export default {
       startTime: '',
       endTime: '',
       timePlaceholder: '',
-      timeFormat: 'MM-DD HH:mm:ss'
+      timeFormat: 'MM/DD HH:mm:ss'
     }
   },
   computed: {
