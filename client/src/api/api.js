@@ -69,6 +69,11 @@ export default {
     url: '/workspace/getRecordList',
     method: 'get'
   },
+  getRecordListByYear: {
+    label: '根据年份获取记录列表',
+    url: '/workspace/getRecordListByYear',
+    method: 'get'
+  },
   addRecord: {
     label: '添加工作记录',
     url: '/workspace/addRecord',

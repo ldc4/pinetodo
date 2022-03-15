@@ -88,5 +88,29 @@ module.exports = {
       console.log('查询失败')
     }
   },
+  async getAllByYear(uid, year) {
+    try {
+      const yearDate = new Date(`${year}`);
+      yearDate.setDate(1);
+      yearDate.setMonth(0);
+      const yearFirstTime = yearDate.getTime();
+      yearDate.setFullYear(yearDate.getFullYear() + 1);
+      yearDate.setMonth(0);
+      yearDate.setDate(0);
+      const yearLastTime = yearDate.getTime();
+
+      const result = await Record.find({
+        creator: uid,
+        createTime: {
+          $lte: yearLastTime,
+          $gte: yearFirstTime,
+        },
+        property: { $ne: 1 }
+      });
+      return result
+    } catch (e) {
+      console.log('查询失败')
+    }
+  }
 }
 

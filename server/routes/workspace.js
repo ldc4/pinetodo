@@ -66,4 +66,16 @@ router.get('/getRecordList', passport.authenticate('jwt', { session: false }), a
   });
 });
 
+router.get('/getRecordListByYear', passport.authenticate('jwt', { session: false }), async function(req, res, next) {
+  const { uid } = req.user
+  const { year } = req.query
+  console.log(year)
+  const result = await recordModel.getAllByYear(uid, year)
+  res.send({
+    code: 0,
+    data: result,
+    msg: ''
+  });
+});
+
 module.exports = router;

@@ -90,27 +90,32 @@ export default {
   computed: {
     ...mapState([
       'pasteData',
-      'setting'
+      'setting',
+      'yearData'
     ])
   },
-  async created() {
-    const { code, data } = await this.$api('getRecordList')
-    if (code === 0) {
-      this.records = data.map((record) => {
-        return {
-          key: record._id,
-          period: record.period,
-          interval: record.interval,
-          startTime: record.startTime,
-          completeTime: record.completeTime,
-          endTime: record.endTime,
-          content: record.content,
-        }
-      }).filter(t => t.content).reverse()
-    }
+  created() {
+    this.getRecordListByYear();
   },
   methods: {
     ...mapMutations(['clearPastData']),
+    // 根据年份获取记录列表
+    getRecordListByYear: async function() {
+      const { code, data } = await this.$api('getRecordListByYear', { year: this.yearData })
+      if (code === 0) {
+        this.records = data.map((record) => {
+          return {
+            key: record._id,
+            period: record.period,
+            interval: record.interval,
+            startTime: record.startTime,
+            completeTime: record.completeTime,
+            endTime: record.endTime,
+            content: record.content,
+          }
+        }).filter(t => t.content).reverse()
+      }
+    },
     // 开始工作
     start: function() {
       this.status = 'doing';
@@ -234,6 +239,11 @@ export default {
           this.$set(this.curRecord, 'content', newData)
         }
         this.clearPastData()
+      }
+    },
+    yearData(newData, oldData) {
+      if (newData !== oldData && newData) {
+        this.getRecordListByYear();
       }
     }
   }

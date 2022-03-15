@@ -24,7 +24,8 @@ export default new Vuex.Store({
     userInfoLoading: false,
     setting: _.cloneDeep(defaultSetting),
     settingLoading: false,
-    pasteData: ''
+    pasteData: '',
+    yearData: new Date().getFullYear(),
   },
   mutations: {
     login(state) {
@@ -52,7 +53,10 @@ export default new Vuex.Store({
     },
     clearPastData(state) {
       state.pasteData = ''
-    }
+    },
+    setYearData(state, payload) {
+      state.yearData = payload;
+    },
   },
   actions: {
     async getUserInfo({ state, commit }) {

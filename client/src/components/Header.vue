@@ -3,6 +3,9 @@
     <div class="name">
       <h1>青松土豆</h1>
     </div>
+    <div class="year">
+      <YearPicker />
+    </div>
     <div class="user">
       <div v-if="!userInfoLoading">
         <div v-if="!hasLogin" class="login">
@@ -33,6 +36,8 @@ import { mapActions, mapState } from 'vuex'
 import LoadingIcon from './icon/LoadingIcon'
 import DropdownIcon from './icon/DropdownIcon'
 import SettingDialog from './bussiness/SettingDialog.vue'
+import YearPicker from './bussiness/YearPicker.vue'
+
 
 export default {
   name: 'Header',
@@ -42,7 +47,8 @@ export default {
   components: {
     LoadingIcon,
     DropdownIcon,
-    SettingDialog
+    SettingDialog,
+    YearPicker,
   },
   data() {
     return {
@@ -117,6 +123,13 @@ export default {
   font-weight: 700;
   float: left;
   margin: 0;
+}
+.year {
+  float: left;
+  margin-left: 5px;
+  line-height: 48px;
+  display: flex;
+  align-items: center;
 }
 .user {
   float: right;
