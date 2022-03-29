@@ -12,6 +12,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 import Header from '../components/Header.vue'
 import Footer from '../components/Footer.vue'
 import Workspace from '../components/Workspace.vue'
@@ -25,6 +26,23 @@ export default {
     Workspace,
     Todospace,
   },
+  created() {
+    // 登录态探活，在十二小时后，每一小时访问一次
+    this.timeout = setTimeout(this.live, 12 * 3600 * 1000);
+  },
+  beforeDestroy() {
+    clearTimeout(this.timeout);
+  },
+  methods: {
+    ...mapActions([
+      'getUserInfo',
+    ]),
+    async live() {
+      await this.getUserInfo();
+      await new Promise(resolve => setTimeout(resolve, 3600 * 1000));
+      await this.live();
+    }
+  }
 }
 </script>
 
