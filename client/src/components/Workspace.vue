@@ -6,6 +6,7 @@
         <Timer
           v-if="status === 'doing'"
           :initProcess="0"
+          :fixProcess="fixProcess"
           :total="curRecord.period"
           @finished="completed"
           @close="cancel"
@@ -84,7 +85,8 @@ export default {
       startTime: '',
       endTime: '',
       timePlaceholder: '',
-      timeFormat: 'MM/DD HH:mm:ss'
+      timeFormat: 'MM/DD HH:mm:ss',
+      fixProcess: 0,
     }
   },
   computed: {
@@ -96,6 +98,11 @@ export default {
   },
   created() {
     this.getRecordListByYear();
+    // 修正计时
+    window.addEventListener('visibilitychange', this.fixTime)
+  },
+  destroyed() {
+    window.removeEventListener('visibilitychange', this.fixTime)
   },
   methods: {
     ...mapMutations(['clearPastData']),
@@ -227,7 +234,17 @@ export default {
     restFinished() {
       this.curRecord = {};
       this.status = 'todo';
-    }
+    },
+    // 修正时间
+    fixTime() {
+      if (this.curRecord.startTime) {
+        let delta = dayjs().unix() - this.curRecord.startTime;
+        if (delta > this.curRecord.endTime - this.curRecord.startTime) {
+          delta = this.curRecord.endTime - this.curRecord.startTime;
+        }
+        this.fixProcess = delta;
+      }
+    },
   },
   watch: {
     pasteData(newData, oldData) {

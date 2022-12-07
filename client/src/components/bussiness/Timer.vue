@@ -40,6 +40,10 @@ export default {
       type: Number,
       default: 0
     },
+    fixProcess: {
+      type: Number,
+      default: 0,
+    },
     noFinish: {
       type: Boolean,
       default: false
@@ -90,6 +94,13 @@ export default {
       document.title = '青松土豆';
       this.$emit('finished');
     }
+  },
+  watch: {
+    fixProcess(newData, oldData) {
+      if (newData !== oldData) {
+        this.process = newData;
+      }
+    },
   }
 }
 </script>
